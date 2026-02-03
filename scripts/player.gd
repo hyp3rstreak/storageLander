@@ -11,10 +11,11 @@ extends RigidBody2D
 
 #@export var gravity_strength = space_obj.mass   # Planet mass, basically
 #@export var orbit_assist := 0.3   # How much we damp radial motion
-#@export var max_speed := 400.0
+@export var max_speed := 400.0
 
 @onready var current_planet: Node2D = null
-@onready var shipHover := false
+var canHail := false
+var pauseGrav := false
 
 # =========================
 # SETUP
@@ -22,7 +23,7 @@ extends RigidBody2D
 
 func _ready() -> void:
 	add_to_group("player")
-	mass = .5
+	mass = 1
 
 # =========================
 # PHYSICS — GRAVITY + ORBIT
@@ -32,47 +33,51 @@ func _ready() -> void:
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	if current_planet == null:
-		#print(self.global_position.x)
+		print("current_planet = null")
 		#print("moving in space")
 		return
-
+	print(current_planet)
 	#print("moving in gravity well")
 	# Vector from ship → planet
 	var to_planet := current_planet.global_position - global_position
-	#var distance = max(to_planet.length(), 40.0)
-	var distance = to_planet.length()
+	var distance = max(to_planet.length(), current_planet.dockDistThresh)
+	#var distance = to_planet.length()
 	# Direction toward planet
 	var radial_dir := to_planet.normalized()
 
+
 	# --- Gravity ---
 	# Inverse-square gravity: stronger up close, smoother overall
-	var gravity_strength = current_planet.gravity_mass
+	var gravity_strength = current_planet.planetMass
 	var gravity_force = radial_dir * gravity_strength / (distance * distance)
+	
+	print("Gavity stuff???")
+	print("math = ",radial_dir * gravity_strength)
+	print("math = ",(distance*distance))
+	print("gravity_force =",gravity_force)
+	print("planet.global = ",current_planet.global_position," - ship.pos ",global_position," =")
+	print("to_planet = ",to_planet)
+	print("distance = ",distance)
+	print("radial_dir = ",radial_dir)
+	print("gravity_strength =",gravity_strength)
+	
 	
 	var tangent_dir := Vector2(-radial_dir.y, radial_dir.x)
 	var radial_speed := linear_velocity.dot(radial_dir)
 	var tangential_speed := linear_velocity.dot(tangent_dir)
 	print("radial:", radial_speed, " tangential:", tangential_speed)
 	
-	if distance < 60:
-		gravity_force = Vector2.ZERO
-	#else:
-		#shipHover = false
-	#if shipHover == true:
-		#gravity_force = Vector2.ZERO
-	apply_central_force(gravity_force)
+	if pauseGrav == true:
+		apply_central_force(Vector2.ZERO)
+	else:
+		apply_central_force(gravity_force)
 		
-	print(gravity_force, " gravForce")
-	print(distance, " distance")
+	#print(gravity_force, " gravForce")
+	#print(distance, " distance")
 
-	# --- Velocity decomposition ---
-	# Split current velocity into:
-	# 1) radial (toward/away from planet)
-	# 2) tangential (sideways, orbit motion)
-
-
-
-
+	if linear_velocity.length() > max_speed:
+		linear_velocity = linear_velocity.lerp(linear_velocity.normalized() * max_speed,0.1)
+		
 	# --- Orbit assist/stats ---
 	# We gently damp ONLY radial motion.
 	# This helps prevent spiraling in or escaping,
@@ -103,19 +108,31 @@ func _physics_process(delta: float) -> void:
 	# --- Brake (retro-thrust) ---
 	if Input.is_action_pressed("down"):
 		apply_central_force(-linear_velocity * 8.0)
+		
+	if Input.is_action_pressed("interact"):
+		if canHail:
+			pauseGrav = true
+			#current_planet.disableGrav()
 	
 func requestLandClearance(obj) -> void:
+	current_planet = obj
+	canHail = true
 	print("hail ", obj.name)
 	UI.show_incoming_call(obj.name)
-func exitLandClearance() -> void:
+	obj.disableGrav()
+func exitLandClearance(obj) -> void:
+	canHail = false
+	pauseGrav = false
 	UI.hide_incoming_call()
 	print("exit")
+	obj.enableGrav()
 	
 func gravWellEnter(obj) -> void:
 	current_planet = obj
 	print(current_planet)
 	print("entering gravWell of ",obj.name)
-	print(obj.name, " gravity_mass = ", obj.gravity_mass)
+	print(obj.name, " planetMass = ", obj.planetMass)
 	print(obj.name, " gravWell size= ",obj.grav_well_size)
-func gravWellExit() -> void:
+func gravWellExit(obj) -> void:
+	current_planet = null
 	print("exit")

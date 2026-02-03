@@ -16,7 +16,7 @@ script = ExtResource("1_uwrxv")
 texture = ExtResource("2_lbhrr")
 
 [node name="playerShip" parent="World" instance=ExtResource("2_yqjtg")]
-position = Vector2(611, 752)
+position = Vector2(411, 674)
 
 [node name="CameraRig" type="Node2D" parent="World"]
 script = ExtResource("5_p57ef")
@@ -27,14 +27,17 @@ release_delay = 2.1
 [node name="body1" parent="World" instance=ExtResource("3_lnu2h")]
 position = Vector2(-638, 374)
 grav_well_size = 300
+dockDistThresh = 10
 
 [node name="body2" parent="World" instance=ExtResource("3_lnu2h")]
 position = Vector2(810, -755)
 grav_well_size = 450
+dockDistThresh = 10
 
 [node name="body3" parent="World" instance=ExtResource("3_lnu2h")]
 position = Vector2(888, 1003)
 grav_well_size = 400
-gravity_mass = 999999
+planetMass = 900000
+dockDistThresh = 10
 
 [node name="UI" parent="." instance=ExtResource("5_iywne")]
