@@ -1,6 +1,7 @@
 extends CanvasLayer
-@onready var incomingCall: Label = $HBoxContainer/VBoxContainer/incomingCall
+
 @onready var planetSizeComms: Control = $HBoxContainer/VBoxContainer/planetSizeComms
+@onready var incomingCall: Label = $HBoxContainer/VBoxContainer/incomingCall
 
 func show_incoming_call(caller):
 	incomingCall.visible = true

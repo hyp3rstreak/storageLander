@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://ces1gdeou8lak"]
+[gd_scene load_steps=9 format=3 uid="uid://ces1gdeou8lak"]
 
 [ext_resource type="Script" uid="uid://do1jxidxcnrig" path="res://scripts/player.gd" id="1_o7q0d"]
 [ext_resource type="Texture2D" uid="uid://b6lbhh4kyesf3" path="res://assets/downShip.png" id="2_w42yn"]
@@ -53,24 +53,24 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o7q0d"]
 size = Vector2(24, 27)
 
-[node name="playerShip" type="RigidBody2D" unique_id=946411079]
+[node name="playerShip" type="RigidBody2D"]
 gravity_scale = 0.0
 script = ExtResource("1_o7q0d")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=251335390]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_qhqgy")
 animation = &"idle"
 autoplay = "idle"
 frame_progress = 0.7072677
 
-[node name="Marker2D" type="Marker2D" parent="." unique_id=516990891]
+[node name="Marker2D" type="Marker2D" parent="."]
 position = Vector2(14, 0)
 
-[node name="bulletTimer" type="Timer" parent="." unique_id=1274683198]
+[node name="bulletTimer" type="Timer" parent="."]
 wait_time = 0.118
 one_shot = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1102791474]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(2, 0)
 shape = SubResource("RectangleShape2D_o7q0d")
 

@@ -1,8 +1,9 @@
-[gd_scene format=3 uid="uid://b7fhv8ue2glkr"]
+[gd_scene load_steps=7 format=3 uid="uid://b7fhv8ue2glkr"]
 
 [ext_resource type="Script" uid="uid://bcc2mdu8ypds8" path="res://scripts/space_obj.gd" id="1_1jh7v"]
 [ext_resource type="Texture2D" uid="uid://cllkq4wjhyivp" path="res://assets/station.png" id="2_pv7fh"]
 [ext_resource type="Script" uid="uid://5gcke7wufx8x" path="res://scripts/gravityField.gd" id="3_pv7fh"]
+[ext_resource type="Script" uid="uid://d03hv38g7jva" path="res://scripts/goal.gd" id="4_7gtmc"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7gtmc"]
 radius = 299.02676
@@ -10,33 +11,37 @@ radius = 299.02676
 [sub_resource type="CircleShape2D" id="CircleShape2D_pv7fh"]
 radius = 57.0
 
-[node name="spaceObj" type="StaticBody2D" unique_id=753235342]
+[node name="spaceObj" type="RigidBody2D"]
+gravity_scale = 0.0
 script = ExtResource("1_1jh7v")
+gravity_mass = 500000
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1027658307]
+[node name="Sprite2D" type="Sprite2D" parent="."]
 visible = false
 position = Vector2(0, -107)
 texture = ExtResource("2_pv7fh")
 region_enabled = true
 region_rect = Rect2(0, 114.61568, 128, 13.384323)
 
-[node name="gravityField" type="Area2D" parent="." unique_id=2028003024]
+[node name="gravityField" type="Area2D" parent="."]
 script = ExtResource("3_pv7fh")
 
-[node name="gravWell" type="CollisionShape2D" parent="gravityField" unique_id=525944968]
+[node name="gravWell" type="CollisionShape2D" parent="gravityField"]
 shape = SubResource("CircleShape2D_7gtmc")
 
-[node name="goal" type="Area2D" parent="." unique_id=1427068724]
+[node name="goal" type="Area2D" parent="."]
+script = ExtResource("4_7gtmc")
 
-[node name="goal" type="CollisionShape2D" parent="goal" unique_id=1207269832]
+[node name="goal" type="CollisionShape2D" parent="goal"]
 shape = SubResource("CircleShape2D_pv7fh")
 debug_color = Color(0.11976334, 0.63448524, 0.37868768, 0.41960785)
 
-[node name="commsArea" type="Marker2D" parent="." unique_id=1650819739]
+[node name="commsArea" type="Marker2D" parent="."]
 position = Vector2(0, -108)
 
-[node name="center" type="Marker2D" parent="." unique_id=1227612464]
+[node name="center" type="Marker2D" parent="."]
 
-[connection signal="body_entered" from="gravityField" to="." method="_on_gravity_field_body_entered"]
-[connection signal="body_entered" from="goal" to="." method="_on_goal_body_entered"]
-[connection signal="body_exited" from="goal" to="." method="_on_goal_body_exited"]
+[connection signal="body_entered" from="gravityField" to="gravityField" method="_on_body_entered"]
+[connection signal="body_exited" from="gravityField" to="gravityField" method="_on_body_exited"]
+[connection signal="body_entered" from="goal" to="goal" method="_on_goal_body_entered"]
+[connection signal="body_exited" from="goal" to="goal" method="_on_goal_body_exited"]
