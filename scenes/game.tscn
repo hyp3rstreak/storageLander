@@ -1,25 +1,41 @@
-[gd_scene load_steps=4 format=3 uid="uid://g1ovdum0lrxs"]
+[gd_scene format=3 uid="uid://g1ovdum0lrxs"]
 
 [ext_resource type="Script" uid="uid://c801fx87l3emi" path="res://scripts/game.gd" id="1_uwrxv"]
+[ext_resource type="Texture2D" uid="uid://bhit0uh5k647q" path="res://assets/stars3body.png" id="2_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://ces1gdeou8lak" path="res://scenes/playerShip.tscn" id="2_yqjtg"]
 [ext_resource type="PackedScene" uid="uid://b7fhv8ue2glkr" path="res://scenes/space_obj.tscn" id="3_lnu2h"]
+[ext_resource type="PackedScene" uid="uid://ealt0fvp0rwp" path="res://scenes/ui.tscn" id="5_iywne"]
+[ext_resource type="Script" uid="uid://da7crs1437hak" path="res://scripts/cameraRig.gd" id="5_p57ef"]
 
-[node name="game" type="Node2D"]
+[node name="game" type="Node2D" unique_id=647290674]
 script = ExtResource("1_uwrxv")
 
-[node name="playerShip" parent="." instance=ExtResource("2_yqjtg")]
-position = Vector2(317, 215)
+[node name="World" type="Node2D" parent="." unique_id=323442064]
 
-[node name="Camera2D" type="Camera2D" parent="playerShip"]
+[node name="bg" type="Sprite2D" parent="World" unique_id=50776782]
+texture = ExtResource("2_lbhrr")
 
-[node name="spaceObj" parent="." instance=ExtResource("3_lnu2h")]
-position = Vector2(1097, 235)
+[node name="playerShip" parent="World" unique_id=1313385330 instance=ExtResource("2_yqjtg")]
+position = Vector2(319, 264)
 
-[node name="spaceObj2" parent="." instance=ExtResource("3_lnu2h")]
-position = Vector2(-455, 29)
+[node name="CameraRig" type="Node2D" parent="World" unique_id=334369333]
+script = ExtResource("5_p57ef")
+release_delay = 2.1
 
-[node name="spaceObj3" parent="." instance=ExtResource("3_lnu2h")]
-position = Vector2(370, -262)
+[node name="Camera2D" type="Camera2D" parent="World/CameraRig" unique_id=1663496806]
 
-[node name="spaceObj4" parent="." instance=ExtResource("3_lnu2h")]
-position = Vector2(303, 558)
+[node name="body1" parent="World" unique_id=1175471108 instance=ExtResource("3_lnu2h")]
+position = Vector2(-638, 374)
+grav_well_size = 300.0
+mass = 8000
+
+[node name="body2" parent="World" unique_id=1165843585 instance=ExtResource("3_lnu2h")]
+position = Vector2(810, -755)
+grav_well_size = 555.0
+mass = 15000
+
+[node name="body3" parent="World" unique_id=1040594871 instance=ExtResource("3_lnu2h")]
+position = Vector2(888, 1003)
+grav_well_size = 400.0
+
+[node name="UI" parent="." unique_id=1666112382 instance=ExtResource("5_iywne")]

@@ -1,19 +1,12 @@
 extends RigidBody2D
+
 @onready var incomingCallText: Label = $HBoxContainer/VBoxContainer/incomingCall
 @onready var UI: CanvasLayer = $"../../UI"
 @onready var animator: AnimatedSprite2D = $AnimatedSprite2D
+@export var thrust_force := 300.0
 @export var rotation_speed := 2.0
+@export var max_speed := 600.0
 @export var linear_drag := 1.0
-@export var thrust_force := 44400.0
-@export var torque_force := 900.0
-@export var gravity_strength := 90000.0
-@export var orbit_assist := 4.0
-@export var max_speed := 1222300.0
-@onready var current_planet
-@onready var body_1: StaticBody2D = $"../body1"
-@onready var body_2: StaticBody2D = $"../body2"
-@onready var body_3: StaticBody2D = $"../body3"
-
 
 #const SPEED = 30
 var dir := "up"
@@ -29,35 +22,23 @@ func _ready() -> void:
 	#for obj in get_tree().get_nodes_in_group("space_objects"):
 		#obj.commsEnter.connect(requestClearance)
 
-func _integrate_forces(state: PhysicsDirectBodyState2D):
-	if not current_planet:
-		return
-	
-	var to_planet = current_planet.global_position - global_position
-	var dist = max(to_planet.length(), 100.0)
-	var dir = to_planet.normalized()
-	var gravity_force = dir * gravity_strength / dist
-	apply_central_force(gravity_force)
-	var radial_dir = dir
-	var tangent = Vector2(-radial_dir.y, radial_dir.x)
-	var radial_speed = linear_velocity.dot(radial_dir)
-	var tangential_speed = linear_velocity.dot(tangent)
-	
-	linear_velocity -= radial_dir * radial_speed * orbit_assist * state.step
-
 func _physics_process(delta):
 	# --- Rotation ---
 	var turn := 0.0
 	if Input.is_action_pressed("left"):
-		apply_torque(-torque_force)
+		dir = "left"
+		turn -= 1.0
 	if Input.is_action_pressed("right"):
-		apply_torque(torque_force)
+		dir = "right"
+		turn += 1.0
 	
 	angular_velocity = turn * rotation_speed
 
 	# --- Thrust ---
 	if Input.is_action_pressed("up"):
-		apply_central_force(transform.x * thrust_force)
+		var forward := Vector2.RIGHT.rotated(rotation)
+		apply_central_force(forward * thrust_force)
+		dir = "up"
 
 	if Input.is_action_pressed("down"):
 		apply_central_force(-linear_velocity * 8)
@@ -69,7 +50,7 @@ func _physics_process(delta):
 
 	# --- Manual drag ---
 	linear_velocity *= linear_drag
-	print(linear_velocity)
+	#print(linear_velocity)
 	# --- Clamp speed ---
 	if linear_velocity.length() > max_speed:
 		linear_velocity = linear_velocity.normalized() * max_speed		
