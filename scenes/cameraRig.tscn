@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://c25menn8u50xk"]
+
+[ext_resource type="Script" uid="uid://da7crs1437hak" path="res://scripts/cameraRig.gd" id="1_i50yt"]
+
+[node name="CameraRig" type="Node2D" unique_id=2054235407]
+script = ExtResource("1_i50yt")
+release_delay = 2.1
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=455216962]

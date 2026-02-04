@@ -1,4 +1,5 @@
 extends Node2D
+
 enum CameraMode {
 	FOLLOW_PLAYER,
 	PLANET_FOCUS,
@@ -8,7 +9,7 @@ enum CameraMode {
 
 @export var follow_speed := 3.0
 @export var planet_bias := 0.75        # how much planet pulls camera
-@export var release_delay := 0.4        # seconds to hold before returning
+@export var release_delay := 0.4        # seconds to holsd before returning
 
 var mode := CameraMode.FOLLOW_PLAYER
 var planet: Node2D

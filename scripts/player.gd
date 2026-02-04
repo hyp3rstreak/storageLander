@@ -9,6 +9,8 @@ extends RigidBody2D
 
 @onready var UI: CanvasLayer = $"../../UI"
 
+
+
 #@export var gravity_strength = space_obj.mass   # Planet mass, basically
 #@export var orbit_assist := 0.3   # How much we damp radial motion
 @export var max_speed := 400.0
@@ -16,6 +18,7 @@ extends RigidBody2D
 @onready var current_planet: Node2D = null
 var canHail := false
 var pauseGrav := false
+var nearPlanet := false
 
 # =========================
 # SETUP
@@ -33,10 +36,10 @@ func _ready() -> void:
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	if current_planet == null:
-		print("current_planet = null")
+		#print("current_planet = null")
 		#print("moving in space")
 		return
-	print(current_planet)
+	#aawwwwwwwwprint(current_planet)
 	#print("moving in gravity well")
 	# Vector from ship → planet
 	var to_planet := current_planet.global_position - global_position
@@ -51,21 +54,21 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	var gravity_strength = current_planet.planetMass
 	var gravity_force = radial_dir * gravity_strength / (distance * distance)
 	
-	print("Gavity stuff???")
-	print("math = ",radial_dir * gravity_strength)
-	print("math = ",(distance*distance))
-	print("gravity_force =",gravity_force)
-	print("planet.global = ",current_planet.global_position," - ship.pos ",global_position," =")
-	print("to_planet = ",to_planet)
-	print("distance = ",distance)
-	print("radial_dir = ",radial_dir)
-	print("gravity_strength =",gravity_strength)
+	#print("Gavity stuff???")
+	#print("math = ",radial_dir * gravity_strength)
+	#print("math = ",(distance*distance))
+	#print("gravity_force =",gravity_force)
+	#print("planet.global = ",current_planet.global_position," - ship.pos ",global_position," =")
+	#print("to_planet = ",to_planet)
+	#print("distance = ",distance)
+	#print("radial_dir = ",radial_dir)
+	#print("gravity_strength =",gravity_strength)
 	
 	
-	var tangent_dir := Vector2(-radial_dir.y, radial_dir.x)
-	var radial_speed := linear_velocity.dot(radial_dir)
-	var tangential_speed := linear_velocity.dot(tangent_dir)
-	print("radial:", radial_speed, " tangential:", tangential_speed)
+	#var tangent_dir := Vector2(-radial_dir.y, radial_dir.x)
+	#var radial_speed := linear_velocity.dot(radial_dir)
+	#var tangential_speed := linear_velocity.dot(tangent_dir)
+	#print("radial:", radial_speed, " tangential:", tangential_speed)
 	
 	if pauseGrav == true:
 		apply_central_force(Vector2.ZERO)
@@ -85,6 +88,9 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 
 	#var ideal_orbit_speed := sqrt(gravity_strength / distance)
 	#print("ideal orbit speed - ", ideal_orbit_speed)
+
+	UI.updatePlanetInfo(current_planet, distance, nearPlanet)
+
 
 # =========================
 # INPUT — THRUST + ROTATION
@@ -107,7 +113,7 @@ func _physics_process(delta: float) -> void:
 
 	# --- Brake (retro-thrust) ---
 	if Input.is_action_pressed("down"):
-		apply_central_force(-linear_velocity * 8.0)
+		apply_central_force(-transform.x * thrust_force)
 		
 	if Input.is_action_pressed("interact"):
 		if canHail:
@@ -117,22 +123,28 @@ func _physics_process(delta: float) -> void:
 func requestLandClearance(obj) -> void:
 	current_planet = obj
 	canHail = true
-	print("hail ", obj.name)
-	UI.show_incoming_call(obj.name)
+	#print("hail ", obj.name)
+	UI.show_incoming_call(obj)
 	obj.disableGrav()
 func exitLandClearance(obj) -> void:
 	canHail = false
 	pauseGrav = false
 	UI.hide_incoming_call()
-	print("exit")
+	#print("exit")
 	obj.enableGrav()
-	
+
 func gravWellEnter(obj) -> void:
 	current_planet = obj
-	print(current_planet)
-	print("entering gravWell of ",obj.name)
-	print(obj.name, " planetMass = ", obj.planetMass)
-	print(obj.name, " gravWell size= ",obj.grav_well_size)
+	nearPlanet = true
+	#print(current_planet)
+	UI.showPlanetInfo()
+	UI.updatePlanetInfo(obj, 0, nearPlanet)
+	#print("entering gravWell of ",obj.name)
+	#print(obj.name, " planetMass = ", obj.planetMass)
+	#print(obj.name, " gravWell size= ",obj.grav_well_size)
 func gravWellExit(obj) -> void:
 	current_planet = null
+	nearPlanet = false
+	UI.updatePlanetInfo(null, 0, nearPlanet)
+	#UI.hidePlanetInfo()
 	print("exit")

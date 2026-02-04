@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://ealt0fvp0rwp"]
+[gd_scene load_steps=4 format=3 uid="uid://ealt0fvp0rwp"]
 
 [ext_resource type="FontFile" uid="uid://cnm51jmo51hi8" path="res://assets/fonts/PixelOperator8.ttf" id="1_nt7q6"]
 [ext_resource type="Script" uid="uid://cagyey4kruse7" path="res://scripts/ui.gd" id="1_x4jx1"]
@@ -9,10 +9,10 @@ outline_color = Color(0, 0, 0, 1)
 shadow_size = 4
 shadow_color = Color(0.8784314, 0.8784314, 0.8784314, 0.30980393)
 
-[node name="UI" type="CanvasLayer" unique_id=1210877374]
+[node name="UI" type="CanvasLayer"]
 script = ExtResource("1_x4jx1")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1151485657]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
@@ -22,12 +22,12 @@ offset_right = 82.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=2024529561]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 
-[node name="incomingCall" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=1845077213]
+[node name="incomingCall" type="Label" parent="HBoxContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 4
@@ -36,6 +36,32 @@ theme_override_font_sizes/font_size = 10
 text = "incoming call"
 label_settings = SubResource("LabelSettings_x4jx1")
 
-[node name="planetSizeComms" type="Control" parent="HBoxContainer/VBoxContainer" unique_id=1533147056]
+[node name="planetSizeComms" type="Control" parent="HBoxContainer/VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -33.0
+offset_right = 33.0
+offset_bottom = 23.0
+grow_horizontal = 2
+size_flags_vertical = 8
+
+[node name="planetInfo1" type="Label" parent="VBoxContainer2"]
+visible = false
+layout_mode = 2
+text = "asdfasdf"
+
+[node name="planetInfo2" type="Label" parent="VBoxContainer2"]
+visible = false
+layout_mode = 2
+text = "asdf"
+
+[node name="planetInfo3" type="Label" parent="VBoxContainer2"]
+visible = false
+layout_mode = 2
+text = "asdf"

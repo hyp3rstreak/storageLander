@@ -1,43 +1,29 @@
-[gd_scene load_steps=7 format=3 uid="uid://g1ovdum0lrxs"]
+[gd_scene format=3 uid="uid://g1ovdum0lrxs"]
 
 [ext_resource type="Script" uid="uid://c801fx87l3emi" path="res://scripts/game.gd" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://bhit0uh5k647q" path="res://assets/stars3body.png" id="2_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://ces1gdeou8lak" path="res://scenes/playerShip.tscn" id="2_yqjtg"]
 [ext_resource type="PackedScene" uid="uid://b7fhv8ue2glkr" path="res://scenes/space_obj.tscn" id="3_lnu2h"]
+[ext_resource type="PackedScene" uid="uid://c25menn8u50xk" path="res://scenes/cameraRig.tscn" id="4_p57ef"]
 [ext_resource type="PackedScene" uid="uid://ealt0fvp0rwp" path="res://scenes/ui.tscn" id="5_iywne"]
-[ext_resource type="Script" uid="uid://da7crs1437hak" path="res://scripts/cameraRig.gd" id="5_p57ef"]
 
-[node name="game" type="Node2D"]
+[node name="game" type="Node2D" unique_id=960361405]
 script = ExtResource("1_uwrxv")
 
-[node name="World" type="Node2D" parent="."]
+[node name="World" type="Node2D" parent="." unique_id=33072879]
 
-[node name="bg" type="Sprite2D" parent="World"]
+[node name="bg" type="Sprite2D" parent="World" unique_id=419151491]
 texture = ExtResource("2_lbhrr")
 
-[node name="playerShip" parent="World" instance=ExtResource("2_yqjtg")]
-position = Vector2(411, 674)
+[node name="playerShip" parent="World" unique_id=1723939467 instance=ExtResource("2_yqjtg")]
+position = Vector2(-1090, 267)
 
-[node name="CameraRig" type="Node2D" parent="World"]
-script = ExtResource("5_p57ef")
-release_delay = 2.1
+[node name="CameraRig" parent="World" unique_id=2054235407 instance=ExtResource("4_p57ef")]
 
-[node name="Camera2D" type="Camera2D" parent="World/CameraRig"]
+[node name="spaceObj" parent="World" unique_id=1960894652 instance=ExtResource("3_lnu2h")]
+position = Vector2(-639, 372)
+grav_well_size = 350
+planetMass = 750000
+dockDistThresh = 50
 
-[node name="body1" parent="World" instance=ExtResource("3_lnu2h")]
-position = Vector2(-638, 374)
-grav_well_size = 300
-dockDistThresh = 10
-
-[node name="body2" parent="World" instance=ExtResource("3_lnu2h")]
-position = Vector2(810, -755)
-grav_well_size = 450
-dockDistThresh = 10
-
-[node name="body3" parent="World" instance=ExtResource("3_lnu2h")]
-position = Vector2(888, 1003)
-grav_well_size = 400
-planetMass = 900000
-dockDistThresh = 10
-
-[node name="UI" parent="." instance=ExtResource("5_iywne")]
+[node name="UI" parent="." unique_id=614461154 instance=ExtResource("5_iywne")]

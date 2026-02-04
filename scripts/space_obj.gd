@@ -1,9 +1,9 @@
 extends RigidBody2D
-enum CameraMode {
-	FOLLOW_PLAYER,
-	PLANET_FOCUS,
-	RELEASE_LAG
-}
+#enum CameraMode {
+	#FOLLOW_PLAYER,
+	#PLANET_FOCUS,
+	#RELEASE_LAG
+#}
 
 @onready var grav_well: CollisionShape2D = $gravityField/gravWell
 @onready var camera_rig: Node2D = $"../CameraRig"
